@@ -19,6 +19,7 @@ class alnaSpider(CrawlSpider):
 
     start_urls = ['http://www.alnaharegypt.com/']
 
+
     rules = (
         Rule(LinkExtractor(allow=('\.alnaharegypt\.com\/.*',)), callback='parse_item', follow=True),
         #Rule(LinkExtractor(allow=('\.news\/[0-9]+') ,restrict_xpaths=("//div[@class='post-cont']")),

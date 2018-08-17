@@ -27,7 +27,7 @@ class JsonWritePipline(object):
         self.filename = 'json/alna_' + time.strftime("%Y%m%d%H", time.localtime()) + '.json'
         if 'title' in item:
             nItem = dict(item)
-            #del nItem['url']
+            del nItem['url']
             del nItem['page_name']
             del nItem['str_size']
             del nItem['do_main']
@@ -117,3 +117,6 @@ class MongoPipeline(object):
 #     # 错误处理方法
 #     def _handle_error(self, failue, item, spider):
 #         print failue
+
+
+

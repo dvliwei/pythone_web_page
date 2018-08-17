@@ -1,2 +1,4 @@
-*.log
-*.json
+/elbalad/json/*.log
+/elbalad/json/*.json
+/alnaharegypt/json/*.log
+/alnaharegypt/json/*.json

@@ -67,7 +67,6 @@ class MongoPipeline(object):
 
         if 'str_size' in item:
             data = dict(item)
-            del data['url']
             del data['title']
             del data['content']
             self.post.insert(data)

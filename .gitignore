@@ -1,3 +1,2 @@
-/elbalad/json/*.log
-/elbalad/json/*.json
-
+*.log
+*.json

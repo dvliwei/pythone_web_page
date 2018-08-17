@@ -147,7 +147,7 @@ MY_USER_AGENT = [
 # Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = True
 
-#LOG_LEVEL= 'WARNING'
+LOG_LEVEL= 'WARNING'
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings

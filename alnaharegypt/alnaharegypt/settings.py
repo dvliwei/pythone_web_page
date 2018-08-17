@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for elbalad project
+# Scrapy settings for alnaharegypt project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,20 +9,20 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'elbalad'
+BOT_NAME = 'alnaharegypt'
 
-SPIDER_MODULES = ['elbalad.spiders']
-NEWSPIDER_MODULE = 'elbalad.spiders'
+SPIDER_MODULES = ['alnaharegypt.spiders']
+NEWSPIDER_MODULE = 'alnaharegypt.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'elbalad (+http://www.yourdomain.com)'
+#USER_AGENT = 'alnaharegypt (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
-# 并发请求(concurrent requests)的最大值
-CONCURRENT_REQUESTS = 32
+# Configure maximum concurrent requests performed by Scrapy (default: 16)
+#CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -39,22 +39,21 @@ CONCURRENT_REQUESTS = 32
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-DEFAULT_REQUEST_HEADERS = {
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'en',
-  'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-  'X-DevTools-Emulate-Network-Conditions-Client-Id':'4DD62FA777FEAA8AE7CBD3B7FC24C1FE'
-}
+#DEFAULT_REQUEST_HEADERS = {
+#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+#   'Accept-Language': 'en',
+#}
+
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'elbalad.middlewares.ElbaladSpiderMiddleware': 543,
+#    'alnaharegypt.middlewares.AlnaharegyptSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'elbalad.middlewares.ElbaladDownloaderMiddleware': 543,
+#    'alnaharegypt.middlewares.AlnaharegyptDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -66,9 +65,32 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'elbalad.pipelines.ElbaladPipeline': 300,
-   'elbalad.pipelines.JsonWritePipline': 300,
+   'alnaharegypt.pipelines.AlnaharegyptPipeline': 300,
+   'alnaharegypt.pipelines.JsonWritePipline': 300,
+   #'alnaharegypt.pipelines.WebcrawlerScrapyPipeline': 300,#保存到mysql数据库
+   'alnaharegypt.pipelines.MongoPipeline': 300,
 }
+
+
+#Mysql数据库的配置信息
+# MYSQL_HOST = '127.0.0.1'
+# MYSQL_DBNAME = 'project_collection_web_page'         #数据库名字，请修改
+# MYSQL_USER = 'root'             #数据库账号，请修改
+# MYSQL_PASSWD = 'root'         #数据库密码，请修改
+#
+# MYSQL_PORT = 3306               #数据库端口，在dbhelper中使用
+
+
+# MONGODB 主机名
+MONGODB_HOST = "127.0.0.1"
+# MONGODB 端口号
+MONGODB_PORT = 27017
+# 数据库名称
+MONGODB_DBNAME = "project_collection_web_page"
+# 存放数据的表名称
+MONGODB_SHEETNAME = "alna"
+
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -83,7 +105,6 @@ ITEM_PIPELINES = {
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
 
-#LOG_LEVEL= 'WARNING'
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 #HTTPCACHE_ENABLED = True

@@ -22,7 +22,7 @@ NEWSPIDER_MODULE = 'albawabhnews.spiders'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -44,7 +44,7 @@ DEFAULT_REQUEST_HEADERS = {
   'Accept-Language': 'zh,en;q=0.9,ar;q=0.8,zh-CN;q=0.7,ja;q=0.6,zh-TW;q=0.5',
   'Cache-Control':'max-age=0',
   'Accept-Encoding':'gzip, deflate',
-  'Host':'www.albawabhnews.com',
+  'Host':'curl.kukuvideo.com',
   'Upgrade-Insecure-Requests':'1'
 }
 
@@ -57,6 +57,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
+   'albawabhnews.middlewares.AlbawabhnewsSpiderMiddleware': 200,
    'albawabhnews.middlewares.AlbawabhnewsDownloaderMiddleware': None,
    'albawabhnews.middlewares.MyUserAgentMiddleware': 300,
 }
@@ -87,7 +88,7 @@ MONGODB_PORT = 27017
 # 数据库名称
 MONGODB_DBNAME = "project_collection_web_page"
 # 存放数据的表名称
-MONGODB_SHEETNAME = "alna"
+MONGODB_SHEETNAME = "albawabhnews"
 
 
 

@@ -10,7 +10,8 @@ from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.downloadermiddlewares.cookies import CookiesMiddleware
 import  random
-
+import  re
+import urllib
 
 class AlbawabhnewsSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -60,6 +61,22 @@ class AlbawabhnewsSpiderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
+    def process_request(self, request, spider):
+        if 'curl.kukuvideo.com/curl/?url=http' not in request.url and 'robots' not in request.url:
+            webUrl = re.sub('curl.kukuvideo.com','www.albawabhnews.com',request.url)
+
+            newUrl = 'http://curl.kukuvideo.com/curl/?url='+str(webUrl)
+
+
+            request = request.replace(url=newUrl)
+            return request
+            # print url
+            # request = request.replace(url=request.url)
+            # return request
+
+
+
+
 class AlbawabhnewsDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
@@ -105,6 +122,7 @@ class AlbawabhnewsDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
 
 
 

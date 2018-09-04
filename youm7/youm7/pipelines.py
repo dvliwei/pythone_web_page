@@ -25,7 +25,7 @@ class JsonWritePipline(object):
         self.filename = 'json/nmisr_' + time.strftime("%Y%m%d%H", time.localtime()) + '.json'
         if 'title' in item:
             nItem = dict(item)
-            #del nItem['url']
+            del nItem['url']
             del nItem['page_name']
             del nItem['str_size']
             del nItem['do_main']

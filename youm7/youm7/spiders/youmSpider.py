@@ -35,7 +35,7 @@ class youmSpider(CrawlSpider):
         youm = Youm7Item()
         youm['url'] = response.url
         youm['page_name'] = m2.hexdigest()
-        youm['do_main'] = 'nmisr.com'
+        youm['do_main'] = 'youm7.com'
 
         title_str = response.xpath('//title/text()')
         content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')

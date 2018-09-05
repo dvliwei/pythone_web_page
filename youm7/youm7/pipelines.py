@@ -19,10 +19,10 @@ class Youm7Pipeline(object):
 class JsonWritePipline(object):
     def __init__(self):#定义全局
 
-        self.logfilename = 'json/nmisr_' + time.strftime("%Y%m%d", time.localtime()) + '.log'
+        self.logfilename = 'json/youm7_' + time.strftime("%Y%m%d", time.localtime()) + '.log'
     def process_item(self,item,spider):
 
-        self.filename = 'json/nmisr_' + time.strftime("%Y%m%d%H", time.localtime()) + '.json'
+        self.filename = 'json/youm7_' + time.strftime("%Y%m%d%H", time.localtime()) + '.json'
         if 'title' in item:
             nItem = dict(item)
             del nItem['url']

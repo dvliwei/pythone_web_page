@@ -29,6 +29,7 @@ class JsonWritePipline(object):
             del nItem['page_name']
             del nItem['str_size']
             del nItem['do_main']
+            del nItem['type']
             line = json.dumps(nItem) + "\n"
             with open(self.filename, 'a+') as f:
                 f.writelines(line)

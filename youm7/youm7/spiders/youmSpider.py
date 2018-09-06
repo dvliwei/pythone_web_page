@@ -39,7 +39,7 @@ class youmSpider(CrawlSpider):
 
         title_str = response.xpath('//title/text()')
         content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')
-        # type_str = response.xpath('//div[@id="PressH"]/b') #分类
+        type_str = response.xpath('//article//div[@class="articleHeader"]//div[@class="breadcumb"]/a/text()')#菜单中的分类
 
         if content_str and title_str:
             content = ""
@@ -49,6 +49,7 @@ class youmSpider(CrawlSpider):
             youm['title'] = title_str.extract()[0]
             youm['content'] = content
             youm['str_size'] = len(content)
+            youm['type'] = type_str.extract()[1] #取详细页中的分类
 
         # 分享页
         # content_str_y = response.xpath('//div[@id="content"]/div[@id="TPKcnt"]/p')

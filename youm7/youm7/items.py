@@ -15,3 +15,4 @@ class Youm7Item(scrapy.Item):
     str_size = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
+    type = scrapy.Field()

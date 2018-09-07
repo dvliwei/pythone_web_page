@@ -17,7 +17,7 @@ class youmSpider(CrawlSpider):
     name = 'youm7'
     allowed_domains = ['youm7.com']
 
-    start_urls = ['https://www.youm7.com/']
+    start_urls = ['https://www.youm7.com/story/2011/4/18/%D8%AA%D8%A7%D9%85%D8%B1-%D8%B9%D8%A7%D8%B4%D9%88%D8%B1-%D9%8A%D8%B1%D9%81%D8%B6-%D8%A7%D9%84%D8%B5%D9%84%D8%AD-%D9%85%D8%B9-%D9%85%D8%B3%D8%A6%D9%88%D9%84%D9%89-%D8%B1%D9%88%D8%AA%D8%A7%D9%86%D8%A7/393728']
 
     rules = (
         Rule(LinkExtractor(allow=('\.youm7\.com\/.*',)), callback='parse_item', follow=True),
@@ -38,13 +38,38 @@ class youmSpider(CrawlSpider):
         youm['do_main'] = 'youm7.com'
 
         title_str = response.xpath('//title/text()')
-        content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')
-        type_str = response.xpath('//article//div[@class="articleHeader"]//div[@class="breadcumb"]/a/text()')#菜单中的分类
-
+        content_str = response.xpath('//article//div[@id="articleBody"]')
+        type_str = response.xpath('//article//div[@class="articleHeader"]//div[@class="breadcumb"]//a/text()')#菜单中的分类
+        if not type_str:
+            type_str = response.xpath('//article//div[@id="articleHeader"]//div[@class="breadcumb"]//a/text()')  # 菜单中的分类
         if content_str and title_str:
             content = ""
+
+
+            content_str = response.xpath('//article//div[@class="articleCont"]//div[@id="articleBody"]/text()')
             for s in content_str.extract():
                 content += s
+
+            content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')
+            for s in content_str.extract():
+                content += s
+
+
+            content_str = response.xpath('//article//div[@class="articleCont"]//div[@id="articleBody"]//p//strong/text()')
+            for s in content_str.extract():
+                content += s
+
+            content_str =response.xpath('//article//div[@id="articleBody"]//div[@dir="auto"]//div/text()')
+            for s in content_str.extract():
+                content += s
+
+            content_str =response.xpath('//article//div[@id="articleBody"]//div/text()')
+            for s in content_str.extract():
+                content += s
+
+            # content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')
+            # for s in content_str.extract():
+            #     content += s
 
             youm['title'] = title_str.extract()[0]
             youm['content'] = content

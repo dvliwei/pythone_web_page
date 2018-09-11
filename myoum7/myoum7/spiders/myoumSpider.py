@@ -11,16 +11,25 @@ from scrapy.spider import CrawlSpider,Rule
 #配合使用Rule进行url规则匹配
 from scrapy.linkextractors import LinkExtractor
 
-from youm7.items import  Youm7Item
+from myoum7.items import  Myoum7Item
 
 class youmSpider(CrawlSpider):
-    name = 'youm7'
-    allowed_domains = ['youm7.com']
+    name = 'myoum7'
+    allowed_domains = ['m.youm7.com']
 
-    start_urls = ['https://www.youm7.com']
+
+    categoryIds=[65,319,97,203,12,298,341,332,88,297,286,192,48,251,94,89,245,291,328,296,335]
+
+    urls = []
+    for   categoryId in   categoryIds:
+        url = 'https://m.youm7.com/Section/NewsSectionPaging?lastid=9/10/2018%2011:43:13%20PM&sectionID=' + str(categoryId)
+        urls.append(url)
+
+    start_urls = urls
+
 
     rules = (
-        Rule(LinkExtractor(allow=('\.youm7\.com\/.*',)), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=('m\.youm7\.com\/.*',)), callback='parse_item', follow=True),
         # Rule(LinkExtractor(allow=('\.news\/[0-9]+') ,restrict_xpaths=("//div[@class='post-cont']")),
         # callback="parse_item",follow=True),
         # Rule(LinkExtractor(allow=('\.news\/show\.aspx\?id=[0-9]+'),restrict_xpaths=("//div[@class='post-cont']")),
@@ -32,38 +41,33 @@ class youmSpider(CrawlSpider):
         m2 = hashlib.md5()
         m2.update(response.url)
 
-        youm = Youm7Item()
+        youm = Myoum7Item()
         youm['url'] = response.url
         youm['page_name'] = m2.hexdigest()
-        youm['do_main'] = 'youm7.com'
+        youm['do_main'] = 'm.youm7.com'
+
+        date_str = response.xpath('//div[@class="news-dev"]/@data-id').extract()
+        attr = re.findall(r"sectionID=(\w+)",response.url)
+        if date_str and attr :
+            sectionID = attr[0]
+            url_date = date_str[len(date_str)-1]
+            print("=======================")
+            print("https://m.youm7.com/Section/NewsSectionPaging?lastid="+url_date+"&sectionID="+sectionID)
+            print("=======================")
+            youm['url'] = "https://m.youm7.com/Section/NewsSectionPaging?lastid="+url_date+"&sectionID="+sectionID
+
 
         title_str = response.xpath('//title/text()')
-        content_str = response.xpath('//article//div[@id="articleBody"]')
-        type_str = response.xpath('//article//div[@class="articleHeader"]//div[@class="breadcumb"]//a/text()')#菜单中的分类
-        if not type_str:
-            type_str = response.xpath('//article//div[@id="articleHeader"]//div[@class="breadcumb"]//a/text()')  # 菜单中的分类
+
+        content_str = response.xpath('//div[@class="text-cont"]//div[@id="articleBody"]//p')
+
+        type_str =response.xpath('//div[@class="container"]//div[@class="breadcumb"]//a/text()')#菜单中的分类
+
         if content_str and title_str:
             content = ""
 
 
-            content_str = response.xpath('//article//div[@class="articleCont"]//div[@id="articleBody"]/text()')
-            for s in content_str.extract():
-                content += s
-
-            content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')
-            for s in content_str.extract():
-                content += s
-
-
-            content_str = response.xpath('//article//div[@class="articleCont"]//div[@id="articleBody"]//p//strong/text()')
-            for s in content_str.extract():
-                content += s
-
-            content_str =response.xpath('//article//div[@id="articleBody"]//div[@dir="auto"]//div/text()')
-            for s in content_str.extract():
-                content += s
-
-            content_str =response.xpath('//article//div[@id="articleBody"]//div/text()')
+            content_str =  response.xpath('//div[@class="text-cont"]//div[@id="articleBody"]//p')
             for s in content_str.extract():
                 content += s
 

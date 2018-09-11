@@ -26,7 +26,7 @@ class masrawySpider(CrawlSpider):
                  235,254,582,583,122,375,378,379,376,598,61,50,51,56,445,446,215]
     allPage = 1600
     urls = []
-    for   categoryId in   categoryIds:
+    for categoryId in  categoryIds:
         for page in range(1 ,1600,+1):
             url = 'http://www.masrawy.com/listing/SectionMore?categoryId='+str(categoryId)+'&pageIndex='+str(page)+'&hashTag=SectionMore'
             urls.append(url)

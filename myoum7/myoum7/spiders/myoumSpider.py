@@ -19,14 +19,13 @@ class youmSpider(CrawlSpider):
 
 
     categoryIds=[65,319,97,203,12,298,341,332,88,297,286,192,48,251,94,89,245,291,328,296,335]
-
+    #categoryIds = [65]
     urls = []
     for   categoryId in   categoryIds:
-        url = 'https://m.youm7.com/Section/NewsSectionPaging?lastid=9/10/2018%2011:43:13%20PM&sectionID=' + str(categoryId)
+        url = 'https://m.youm7.com/Section/NewsSectionPaging?lastid=9/10/2018 11:43:13 PM&sectionID=' + str(categoryId)
         urls.append(url)
 
     start_urls = urls
-
 
     rules = (
         Rule(LinkExtractor(allow=('m\.youm7\.com\/.*',)), callback='parse_item', follow=True),
@@ -35,6 +34,7 @@ class youmSpider(CrawlSpider):
         # Rule(LinkExtractor(allow=('\.news\/show\.aspx\?id=[0-9]+'),restrict_xpaths=("//div[@class='post-cont']")),
         # callback="parse_item",follow=True),
     )
+
 
     def parse_item(self, response):
 
@@ -46,46 +46,47 @@ class youmSpider(CrawlSpider):
         youm['page_name'] = m2.hexdigest()
         youm['do_main'] = 'm.youm7.com'
 
-        date_str = response.xpath('//div[@class="news-dev"]/@data-id').extract()
-        attr = re.findall(r"sectionID=(\w+)",response.url)
-        if date_str and attr :
-            sectionID = attr[0]
-            url_date = date_str[len(date_str)-1]
-            print("=======================")
-            print("https://m.youm7.com/Section/NewsSectionPaging?lastid="+url_date+"&sectionID="+sectionID)
-            print("=======================")
-            youm['url'] = "https://m.youm7.com/Section/NewsSectionPaging?lastid="+url_date+"&sectionID="+sectionID
 
+        referer = response.request.headers.get('Referer', None)
+
+        reattr = re.findall(r"sectionID=(\w+)", referer)
+        if reattr:
+            youm['url'] = referer
+            yield Request(referer, callback=self.parse_item)
+
+        date_str = response.xpath('//div[@class="news-dev"]/@data-id')
+
+        attr = re.findall(r"sectionID=(\w+)", response.url)
+
+        if date_str and attr:
+            sectionID = attr[0]
+            date_str = date_str.extract()
+            url_date = date_str[len(date_str)-1]
+            newUrl = "https://m.youm7.com/Section/NewsSectionPaging?lastid="+url_date+"&sectionID="+str(sectionID)
+            youm['url'] = newUrl
+            yield Request(newUrl, callback=self.parse_item)
 
         title_str = response.xpath('//title/text()')
 
-        content_str = response.xpath('//div[@class="text-cont"]//div[@id="articleBody"]//p')
+        content_str = response.xpath('//div[@class="text-cont"]//div[@id="articleBody"]//p/text()')
 
         type_str =response.xpath('//div[@class="container"]//div[@class="breadcumb"]//a/text()')#菜单中的分类
 
         if content_str and title_str:
             content = ""
-
-
-            content_str =  response.xpath('//div[@class="text-cont"]//div[@id="articleBody"]//p')
+            content_str =  response.xpath('//div[@class="text-cont"]//div[@id="articleBody"]//p/text()')
             for s in content_str.extract():
                 content += s
-
-            # content_str = response.xpath('//article//div[@id="articleBody"]//p/text()')
-            # for s in content_str.extract():
-            #     content += s
 
             youm['title'] = title_str.extract()[0]
             youm['content'] = content
             youm['str_size'] = len(content)
             youm['type'] = type_str.extract()[1] #取详细页中的分类
 
-        # 分享页
-        # content_str_y = response.xpath('//div[@id="content"]/div[@id="TPKcnt"]/p')
-        # if content_str_y and title_str:
-        #     content = re.sub(r'</?\w+[^>]*>', '', content_str_y.extract()[0])
-        #     alna['title'] = title_str.extract()[0]
-        #     alna['content'] = content
-        #     alna['str_size'] = len(content)
+
 
         yield youm
+
+
+
+
